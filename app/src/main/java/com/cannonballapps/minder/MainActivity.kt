@@ -56,7 +56,9 @@ fun RemindersListLayout() {
 
 @Composable
 fun RemindersList(reminderItems: List<ReminderItem>) {
-    LazyColumn {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
         item {
             RemindersListTitleLayout()
         }
@@ -93,7 +95,11 @@ fun RemindersListItem(item: ReminderItem) {
     Surface(
         Modifier
             .fillMaxWidth(),
-        border = BorderStroke(width = 2.dp, color = Color.Cyan),
+        border = BorderStroke(
+            width = 2.dp,
+            color = MaterialTheme.colors.primaryVariant,
+            // TODO color
+        ),
         shape = RoundedCornerShape(15),
     ) {
         Column {
