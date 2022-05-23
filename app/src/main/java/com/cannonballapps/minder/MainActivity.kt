@@ -24,27 +24,42 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            RemindersListLayout()
+            MinderApp()
         }
     }
 }
 
 @Composable
-fun RemindersListLayout() {
+fun MinderApp() {
     MinderTheme {
         Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
+            modifier = Modifier
+                .fillMaxSize(),
+            color = MaterialTheme.colors.background,
         ) {
-            RemindersListTitleLayout()
-            RemindersList(sampleList())
+
         }
+        RemindersListLayout()
+    }
+}
+
+@Composable
+fun RemindersListLayout() {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
+    ) {
+        RemindersList(sampleList())
     }
 }
 
 @Composable
 fun RemindersList(reminderItems: List<ReminderItem>) {
     LazyColumn {
+        item {
+            RemindersListTitleLayout()
+        }
         items(reminderItems) { reminder ->
             RemindersListItem(item = reminder)
         }
@@ -54,7 +69,8 @@ fun RemindersList(reminderItems: List<ReminderItem>) {
 @Composable
 fun RemindersListTitleLayout() {
     Row(
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
     ) {
         RemindersListTitle()
     }
@@ -81,12 +97,15 @@ fun RemindersListItem(item: ReminderItem) {
         shape = RoundedCornerShape(15),
     ) {
         Column {
+            // Reminder name
             Row {
                 Text(
                     item.name,
                     modifier = Modifier.padding(all = 8.dp),
                 )
             }
+            // TODO active toggle
+            // TODO days of the week
         }
     }
 }
@@ -121,12 +140,11 @@ fun PreviewRemindersList() {
     }
 }
 
-
 data class ReminderItem(val name: String)
 
 val sampleList = {
     val items = mutableListOf<ReminderItem>()
-    for (i in 0..100) {
+    for (i in 0..400) {
         items.add(ReminderItem("Item $i"))
     }
     items
