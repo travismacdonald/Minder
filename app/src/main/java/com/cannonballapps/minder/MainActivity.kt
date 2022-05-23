@@ -98,17 +98,18 @@ fun RemindersListTitle() {
 fun RemindersListItem(item: ReminderItem) {
     Surface(
         Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .wrapContentHeight(),
         border = BorderStroke(
             width = 2.dp,
             color = if (item.isActive) MaterialTheme.colors.primary else MaterialTheme.colors.background,
         ),
-        shape = RoundedCornerShape(25),
+        shape = RoundedCornerShape(15),
         color = if (item.isActive) MaterialTheme.colors.background else MaterialTheme.colors.secondaryVariant,
     ) {
-        Row {
+        Row(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min)) {
             Column(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 // Reminder name
@@ -128,7 +129,11 @@ fun RemindersListItem(item: ReminderItem) {
                 // TODO active toggle
                 // TODO days of the week
             }
-            Column(modifier = Modifier.wrapContentWidth()) {
+            Column(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .fillMaxHeight(),
+            ) {
                 Switch(
                     checked = item.isActive,
                     onCheckedChange = { /* TODO */ },
