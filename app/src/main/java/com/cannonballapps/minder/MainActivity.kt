@@ -106,15 +106,16 @@ fun RemindersListItem(item: ReminderItem) {
             width = 2.dp,
             color = if (item.isActive) MaterialTheme.colors.primary else MaterialTheme.colors.background,
         ),
-        shape = RoundedCornerShape(15),
+        shape = RoundedCornerShape(size = 10.dp),
         color = if (item.isActive) MaterialTheme.colors.background else MaterialTheme.colors.secondaryVariant,
     ) {
         Row(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min)) {
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceBetween,
+                    .fillMaxHeight()
+                    .padding(horizontal = 20.dp, vertical = 20.dp), // TODO extract these two
+                verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
                 // Reminder name
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -122,8 +123,10 @@ fun RemindersListItem(item: ReminderItem) {
                     Canvas(modifier = Modifier.size(8.dp)) {
                         drawCircle(color = circleColor)
                     }
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        item.name,
+                        ReminderDay.formatReminderDays(item.activeDays),
+                        color = MaterialTheme.colors.secondary,
                     )
                 }
                 Text(
@@ -140,7 +143,8 @@ fun RemindersListItem(item: ReminderItem) {
             Column(
                 modifier = Modifier
                     .wrapContentWidth()
-                    .fillMaxHeight(),
+                    .fillMaxHeight()
+                    .padding(horizontal = 20.dp)
             ) {
                 Switch(
                     checked = item.isActive,
@@ -189,15 +193,7 @@ fun PreviewRemindersListItemActive() {
                 endTime = LocalTime.of(18, 0),
                 intervalInMins = 60,
                 isActive = true,
-                activeDays = listOf(
-                    false,
-                    true,
-                    true,
-                    true,
-                    true,
-                    true,
-                    false,
-                ),
+                activeDays = getReminderDays(),
             ),
         )
     }
@@ -219,15 +215,7 @@ fun PreviewRemindersListItemInactive() {
                 endTime = LocalTime.of(18, 0),
                 intervalInMins = 60,
                 isActive = false,
-                activeDays = listOf(
-                    false,
-                    true,
-                    true,
-                    true,
-                    true,
-                    true,
-                    false,
-                ),
+                activeDays = getReminderDays(),
             ),
         )
     }
@@ -247,10 +235,10 @@ data class ReminderItem(
     val endTime: LocalTime,
     val intervalInMins: Int,
     var isActive: Boolean,
-    var activeDays: List<Boolean>,
+    var activeDays: List<ReminderDay>,
 )
 
-enum class ReminderDay(shortName: String, var isActive: Boolean = false) {
+enum class ReminderDay(val shortName: String, var isActive: Boolean = true) {
     SUNDAY(shortName = "Sun"),
     MONDAY(shortName = "Mon"),
     TUESDAY(shortName = "Tue"),
@@ -262,6 +250,16 @@ enum class ReminderDay(shortName: String, var isActive: Boolean = false) {
     fun toggleIsActive() {
         this.isActive = !this.isActive
     }
+
+    companion object {
+        fun formatReminderDays(days: List<ReminderDay>): String {
+            return days.filter { it.isActive }.map { it.shortName }.joinToString(separator = ", ")
+        }
+    }
+}
+
+fun getReminderDays() : List<ReminderDay> {
+    return ReminderDay.values().toMutableList()
 }
 
 val sampleList = {
