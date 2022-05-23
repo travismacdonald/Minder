@@ -19,6 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
+import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import com.cannonballapps.minder.ui.theme.MinderTheme
 import java.time.LocalTime
@@ -144,7 +146,9 @@ fun RemindersListItem(item: ReminderItem) {
                 modifier = Modifier
                     .wrapContentWidth()
                     .fillMaxHeight()
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 20.dp, vertical = 20.dp),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.End,
             ) {
                 Switch(
                     checked = item.isActive,
@@ -158,10 +162,17 @@ fun RemindersListItem(item: ReminderItem) {
                         uncheckedTrackAlpha = 1f,
                     )
                 )
-                IconButton(onClick = { /*TODO*/ }) {
+                // Ensure that the icon is aligned to the layout, without including the accessibility padding
+                val buttonSize = 28.dp
+                val iconOffset = max(48.dp - buttonSize, 0.dp) / 2
+                IconButton(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier.absoluteOffset(x = iconOffset, y = iconOffset),
+                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_delete_24),
-                        contentDescription = ""
+                        contentDescription = "",
+                        modifier = Modifier.size(buttonSize)
                     )
                 }
             }
