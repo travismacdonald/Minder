@@ -13,12 +13,12 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cannonballapps.minder.ui.theme.MinderTheme
+import java.time.LocalTime
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +37,8 @@ fun MinderApp() {
                 .fillMaxSize(),
             color = MaterialTheme.colors.background,
         ) {
-
+            RemindersListLayout()
         }
-        RemindersListLayout()
     }
 }
 
@@ -88,6 +87,8 @@ fun RemindersListTitle() {
     )
 }
 
+// TODO trash icon
+// TODO Row -> two columns with weight
 // TODO border color
 // TODO extract hardcoded dimens
 @Composable
@@ -110,6 +111,10 @@ fun RemindersListItem(item: ReminderItem) {
                     modifier = Modifier.padding(all = 8.dp),
                 )
             }
+            Row {
+
+            }
+            // TODO time range
             // TODO active toggle
             // TODO days of the week
         }
@@ -146,12 +151,33 @@ fun PreviewRemindersList() {
     }
 }
 
-data class ReminderItem(val name: String)
+data class ReminderItem(
+    val name: String,
+    val startTime: LocalTime,
+    val endTime: LocalTime,
+    val intervalInMins: Int,
+    var isActive: Boolean,
+    var activeDays: List<ReminderDay>,
+)
+
+enum class ReminderDay(shortName: String, var isActive: Boolean = false) {
+    SUNDAY(shortName = "Sun"),
+    MONDAY(shortName = "Mon"),
+    TUESDAY(shortName = "Tue"),
+    WEDNESDAY(shortName = "Wed"),
+    THURSDAY(shortName = "Thu"),
+    FRIDAY(shortName = "Fri"),
+    SATURDAY(shortName = "Sat");
+
+    fun toggleIsActive() {
+        this.isActive = !this.isActive
+    }
+}
 
 val sampleList = {
     val items = mutableListOf<ReminderItem>()
     for (i in 0..400) {
-        items.add(ReminderItem("Item $i"))
+//        items.add(ReminderItem("Item $i"))
     }
     items
 }
