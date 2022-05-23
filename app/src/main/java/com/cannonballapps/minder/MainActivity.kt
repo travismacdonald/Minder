@@ -6,12 +6,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -109,11 +111,17 @@ fun RemindersListItem(item: ReminderItem) {
     ) {
         Row(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min)) {
             Column(
-                modifier = Modifier.weight(1f).fillMaxHeight(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 // Reminder name
-                Row {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    val circleColor = if (item.isActive) MaterialTheme.colors.primary else MaterialTheme.colors.secondary
+                    Canvas(modifier = Modifier.size(8.dp)) {
+                        drawCircle(color = circleColor)
+                    }
                     Text(
                         item.name,
                     )
