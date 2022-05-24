@@ -98,12 +98,6 @@ fun RemindersListTitle() {
     )
 }
 
-// TODO make preview for inactive
-
-// TODO trash icon
-// TODO Row -> two columns with weight
-// TODO border color
-// TODO extract hardcoded dimens
 @Composable
 fun RemindersListItem(item: ReminderItem) {
     Surface(
@@ -144,9 +138,7 @@ fun RemindersListItem(item: ReminderItem) {
                 }
 
                 Text(
-                    // TODO format time
                     item.formatTimeRange(),
-//                    "${item.startTime} - ${item.endTime}",
                     fontFamily = latoFontFamily,
                     fontWeight = FontWeight.Normal,
                     fontSize = 28.sp,
@@ -158,9 +150,6 @@ fun RemindersListItem(item: ReminderItem) {
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp,
                 )
-                // TODO time range
-                // TODO active toggle
-                // TODO days of the week
             }
 
             Column(
