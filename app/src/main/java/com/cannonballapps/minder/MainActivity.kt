@@ -20,12 +20,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import com.cannonballapps.minder.ui.theme.MinderTheme
-import java.time.LocalTime
+import org.joda.time.LocalTime
+import java.util.*
+
+//import java.time.LocalTime
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,7 +145,8 @@ fun RemindersListItem(item: ReminderItem) {
 
                 Text(
                     // TODO format time
-                    "${item.startTime} - ${item.endTime}",
+                    item.formatTimeRange(),
+//                    "${item.startTime} - ${item.endTime}",
                     fontFamily = latoFontFamily,
                     fontWeight = FontWeight.Normal,
                     fontSize = 28.sp,
@@ -219,8 +224,8 @@ fun PreviewRemindersListItemActive() {
         RemindersListItem(
             ReminderItem(
                 name = "Drink Water",
-                startTime = LocalTime.of(10, 30),
-                endTime = LocalTime.of(18, 0),
+                startTime = LocalTime(10, 30),
+                endTime = LocalTime(18, 0),
                 intervalInMins = 60,
                 isActive = true,
                 activeDays = getReminderDays(),
@@ -241,8 +246,8 @@ fun PreviewRemindersListItemInactive() {
         RemindersListItem(
             ReminderItem(
                 name = "Drink Water",
-                startTime = LocalTime.of(10, 30),
-                endTime = LocalTime.of(18, 0),
+                startTime = LocalTime(10, 30),
+                endTime = LocalTime(18, 0),
                 intervalInMins = 60,
                 isActive = false,
                 activeDays = getReminderDays(),
@@ -268,7 +273,11 @@ data class ReminderItem(
     var activeDays: List<ReminderDay>,
 ) {
     fun formatTimeRange() : String {
+        return "${formatTime(startTime)} - ${formatTime(endTime)}"
+    }
 
+    private fun formatTime(time: LocalTime): String {
+        return time.toString("h:mm a").filter { it != '.' }.uppercase()
     }
 }
 
