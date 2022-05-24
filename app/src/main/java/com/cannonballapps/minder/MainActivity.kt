@@ -17,10 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
-import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import com.cannonballapps.minder.ui.theme.MinderTheme
 import java.time.LocalTime
@@ -111,6 +113,7 @@ fun RemindersListItem(item: ReminderItem) {
         shape = RoundedCornerShape(size = 10.dp),
         color = if (item.isActive) MaterialTheme.colors.background else MaterialTheme.colors.secondaryVariant,
     ) {
+
         Row(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min)) {
             Column(
                 modifier = Modifier
@@ -119,6 +122,7 @@ fun RemindersListItem(item: ReminderItem) {
                     .padding(horizontal = 20.dp, vertical = 20.dp), // TODO extract these two
                 verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
+
                 // Reminder name
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     val circleColor = if (item.isActive) MaterialTheme.colors.primary else MaterialTheme.colors.secondary
@@ -129,19 +133,31 @@ fun RemindersListItem(item: ReminderItem) {
                     Text(
                         ReminderDay.formatReminderDays(item.activeDays),
                         color = MaterialTheme.colors.secondary,
+                        fontFamily = latoFontFamily,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp,
                     )
                 }
+
                 Text(
                     // TODO format time
-                    "${item.startTime} - ${item.endTime}"
+                    "${item.startTime} - ${item.endTime}",
+                    fontFamily = latoFontFamily,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 28.sp,
                 )
+
                 Text(
-                    "${item.name}"
+                    "${item.name}",
+                    fontFamily = latoFontFamily,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp,
                 )
                 // TODO time range
                 // TODO active toggle
                 // TODO days of the week
             }
+
             Column(
                 modifier = Modifier
                     .wrapContentWidth()
@@ -150,6 +166,7 @@ fun RemindersListItem(item: ReminderItem) {
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.End,
             ) {
+
                 Switch(
                     checked = item.isActive,
                     onCheckedChange = { /* TODO */ },
@@ -162,6 +179,7 @@ fun RemindersListItem(item: ReminderItem) {
                         uncheckedTrackAlpha = 1f,
                     )
                 )
+
                 // Ensure that the icon is aligned to the layout, without including the accessibility padding
                 val buttonSize = 28.dp
                 val iconOffset = max(48.dp - buttonSize, 0.dp) / 2
@@ -172,7 +190,8 @@ fun RemindersListItem(item: ReminderItem) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_delete_24),
                         contentDescription = "",
-                        modifier = Modifier.size(buttonSize)
+                        modifier = Modifier.size(buttonSize),
+                        tint = MaterialTheme.colors.secondary,
                     )
                 }
             }
@@ -247,7 +266,11 @@ data class ReminderItem(
     val intervalInMins: Int,
     var isActive: Boolean,
     var activeDays: List<ReminderDay>,
-)
+) {
+    fun formatTimeRange() : String {
+
+    }
+}
 
 enum class ReminderDay(val shortName: String, var isActive: Boolean = true) {
     SUNDAY(shortName = "Sun"),
@@ -280,3 +303,8 @@ val sampleList = {
     }
     items
 }
+
+val latoFontFamily = FontFamily(
+    Font(R.font.lato, FontWeight.Normal),
+    Font(R.font.lato_bold, FontWeight.Bold),
+)
